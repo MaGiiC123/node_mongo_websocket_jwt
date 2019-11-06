@@ -16,16 +16,18 @@ app.use(jwt());
 // api routes
 app.use('/users', require('./users/users.controller'));
 
-app.use(express.static('public'));
-app.use("/public/index", function(req, res) {
+app.use(express.static('/public'));
+app.use('/public', express.static(__dirname + '/public'))
+
+/*app.use("/", function(req, res) {
     res.sendFile(process.cwd() + '/public/index.html');
 });
-app.use("/public/jwtvanilla.js", function(req, res) {
+/*app.use("/public/jwtvanilla.js", function(req, res) {
     res.sendFile(process.cwd() + '/public/jwtvanilla.js');
 });
 app.use("/jwtvanilla.js", function(req, res) {
     res.sendFile(process.cwd() + '/public/jwtvanilla.js');
-});
+});*/
 
 
 // global error handler

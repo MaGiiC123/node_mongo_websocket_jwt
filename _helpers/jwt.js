@@ -12,6 +12,7 @@ function jwt() {
             '/users/authenticate',
             '/users/register',
             '/public/index',
+            '/public/index.html',
             '/public/jwtvanilla.js',
             '/public/jwtvanilla',
             '/'
