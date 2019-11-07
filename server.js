@@ -17,7 +17,7 @@ app.use(jwt());
 app.use('/users', require('./users/users.controller'));
 
 app.use(express.static('/public'));
-app.use('/public', express.static(__dirname + '/public'))
+app.use('/public', express.static(__dirname + '/public'));
 
 /*app.use("/", function(req, res) {
     res.sendFile(process.cwd() + '/public/index.html');
@@ -64,12 +64,12 @@ wsServer.on('request', function(request) {
     if (!originIsAllowed(request.origin)) {
       // Make sure we only accept requests from an allowed origin
       request.reject();
-      console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
+      console.log((new Date().toLocaleString()) + ' Connection from origin ' + request.origin + ' rejected.');
       return;
     }
     
     var connection = request.accept('echo-protocol', request.origin);
-    console.log((new Date()) + ' Connection accepted from: ' + request.origin);
+    console.log((new Date().toLocaleString()) + ' Connection accepted from: ' + request.origin);
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
             console.log('Received Message: ' + message.utf8Data);
@@ -81,6 +81,10 @@ wsServer.on('request', function(request) {
         }
     });
     connection.on('close', function(reasonCode, description) {
-        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+        console.log('-------------------------------------------')
+        console.log((new Date().toLocaleString()) + ' Peer ' + connection.remoteAddress + ' disconnected.' + '\n' +
+            'ReasonCode: "' + reasonCode + '"' + '\n' +
+            'Description: "' + description + '"');
+        console.log('-------------------------------------------')
     });
 });

@@ -54,9 +54,13 @@ function authenticateUser(_username, _pw) {
     xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
     xhr.addEventListener('load', function() {
+        console.log('auth server response');
+        xhr.re
         var responseObject = JSON.parse(this.response);
         console.log(responseObject);
         saveSessionToken(responseObject);
+
+        console.log('auth server response');
     });
     
     var sendObject = JSON.stringify({username: _username.value, password: _pw.value});
@@ -80,7 +84,9 @@ function registerUser(_username, _pw) {
     });
     
     //var sendObject = JSON.stringify({username: _username.value, password: _pw.value});
-    var sendObject = JSON.stringify({firstName: "test", lastName: "test", username: "test", password: "test"});
+    //var sendObject = JSON.stringify({firstName: "test", lastName: "test", username: "test", password: "test"});
+    var sendObject = JSON.stringify({firstName: _username.value, lastName: _username.value, username: _username.value, password: _pw.value});
+    console.log(_username);
     console.log(sendObject);
     xhr.send(sendObject);
 }
