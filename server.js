@@ -42,6 +42,9 @@ const server = app.listen(port, function () {
 
 
 //------------------------------------------------------------------------------------------------------------------------
+var message_history = [ ];
+var message_history_maxlength = 100;
+var connected_clients = [ ];
 
 var WebSocketServer = require('websocket').server;
 
@@ -52,7 +55,8 @@ wsServer = new WebSocketServer({
     // facilities built into the protocol and the browser.  You should
     // *always* verify the connection's origin and decide whether or not
     // to accept it.
-    autoAcceptConnections: false
+    autoAcceptConnections: false,
+    closeTimeout = 30 * 1000 /* close conn after 30 sesconds */
 });
 
 function originIsAllowed(origin) {
@@ -61,8 +65,7 @@ function originIsAllowed(origin) {
 }
 
 wsServer.on('request', function(request) {
-    if (!originIsAllowed(request.origin)) {
-      // Make sure we only accept requests from an allowed origin
+    if (!originIsAllowed(request.origin)) { // Make sure we only accept requests from an allowed origin
       request.reject();
       console.log((new Date().toLocaleString()) + ' Connection from origin ' + request.origin + ' rejected.');
       return;
