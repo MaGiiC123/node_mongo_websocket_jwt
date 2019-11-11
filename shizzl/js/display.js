@@ -150,7 +150,7 @@ Game.Display.prototype._resize = function() {
 	
 	var fontSize = Math.floor(boxHeight / this._options.spacing);
 
-	this.setOptions({fontSize:fontSize});
+	this.setOptions({ fontSize:fontSize });
 	this._canvas.style.top = Math.round((h-this._canvas.height)/2) + "px";
 }
 

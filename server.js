@@ -56,12 +56,23 @@ wsServer = new WebSocketServer({
     // *always* verify the connection's origin and decide whether or not
     // to accept it.
     autoAcceptConnections: false,
-    closeTimeout = 30 * 1000 /* close conn after 30 sesconds */
+    //closeTimeout = 30000 /* close conn after 30 sesconds */
 });
 
 function originIsAllowed(origin) {
   // put logic here to detect whether the specified origin is allowed.
   return true;
+}
+
+/**
+ * Helper function for escaping input strings
+ */
+function htmlEntities(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
 }
 
 wsServer.on('request', function(request) {
@@ -71,12 +82,36 @@ wsServer.on('request', function(request) {
       return;
     }
     
-    var connection = request.accept('echo-protocol', request.origin);
+    //var connection = request.accept('echo-protocol', request.origin);
+    var connection = request.accept(null, request.origin);
+
     console.log((new Date().toLocaleString()) + ' Connection accepted from: ' + request.origin);
+
+    var client_index = connected_clients.push(connection) - 1;
+
+    if (message_history.length > 0) {
+        connection.sendUTF(JSON.stringify( { type: 'history', data: message_history} ));
+    }
+
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
-            console.log('Received Message: ' + message.utf8Data);
-            connection.sendUTF(message.utf8Data);
+            /*console.log('Received Message: ' + message.utf8Data);
+            connection.sendUTF(message.utf8Data);*/
+
+            console.log((new Date()) + ' Received Message from ' + connection.remoteAddress + ': ' + message.utf8Data);
+            // we want to keep history of all sent messages
+            var obj = {
+                time: (new Date()),
+                text: htmlEntities(message.utf8Data),
+                author: connection.remoteAddress
+            };
+            message_history.push(obj);
+            message_history = message_history.slice(-message_history_maxlength);
+            // broadcast message to all connected clients
+            var json = JSON.stringify({ type: 'message', data: obj });
+            for (var i=0; i<connected_clients.length; i++) {
+                connected_clients[i].sendUTF(json);
+            }
         }
         else if (message.type === 'binary') {
             console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
@@ -84,10 +119,11 @@ wsServer.on('request', function(request) {
         }
     });
     connection.on('close', function(reasonCode, description) {
-        console.log('-------------------------------------------')
-        console.log((new Date().toLocaleString()) + ' Peer ' + connection.remoteAddress + ' disconnected.' + '\n' +
-            'ReasonCode: "' + reasonCode + '"' + '\n' +
-            'Description: "' + description + '"');
-        console.log('-------------------------------------------')
+        console.log((new Date().toLocaleString()) + ' Peer ' + connection.remoteAddress + ' disconnected.' + '\n' + 'ReasonCode: "' + reasonCode + '"' + '\n' + 'Description: "' + description + '"');
+        for(var i=0; i<connected_clients.length; i++) {
+            if (connected_clients[i] == connection) {
+                connected_clients.slice(i,1);
+            }
+        }
     });
 });

@@ -1,5 +1,5 @@
 Game.Bubble = function(text, final) {
-	this._text = text + (final ? "" : "\n\n%c{saddlebrown}(Enter to continue)");
+	this._text = text + (final ? "" : "\n\n%c{saddlebrown}(Enter to continue)"); /* saddlebrown => #73503C */
 	this._final = final;
 	this._cells = {};
 	this._promise = new Promise();

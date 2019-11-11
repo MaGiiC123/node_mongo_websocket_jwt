@@ -8,6 +8,7 @@
         "url": "https://github.com/cornflourblue/node-mongo-registration-login-api.git"
     },
     "scripts": {
+        "prestart": "",
         "start": "node ./server.js",
         "start-dev": "nodemon ./server.js"
     },
