@@ -61,7 +61,8 @@ function authenticateUser(_username, _pw) {
         console.log(responseObject);
         saveSessionToken(responseObject);
         if (xhr.status == 200) {
-            startWebsocket();
+            //startWebsocket();
+            window.location.href = "http://localhost:4000/public/shizzle/index.html";
         }
 
         console.log('auth server response');
@@ -99,6 +100,9 @@ function saveSessionToken(responseObject) {
     console.log('saving token: "'+ responseObject.token +'"');
     localStorage.setItem('userSessionToken', responseObject.token);
     localStorage.setItem('userSessionToken_TimeStamp', responseObject.createdDate);
+
+    document.cookie = "userSessionToken;" + responseObject.token + ";";
+    document.cookie = "userSessionToken_TimeStamp;" + responseObject.createdDate + ";";
 }
 
 function getSessionToken() {
