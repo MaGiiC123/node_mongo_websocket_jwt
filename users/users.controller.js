@@ -14,7 +14,13 @@ router.delete('/:id', _delete);
 module.exports = router;
 
 function authenticate(req, res, next) {
-    console.log('user trying to authenticate: ' + req.toString());
+    //console.log('user trying to authenticate');
+    var reqToken = String(req.headers.cookie).split(';')[0].split('=')[1]; //=> recieved user token
+
+    console.log(req.headers.cookie);
+
+    //console.log("req: " + JSON.stringify(req));
+
     userService.authenticate(req.body)
         .then(user => user ? res.status(200).json(user) : res.status(400).json({ message: 'Username or password is incorrect' }))
         .catch(err => next(err));

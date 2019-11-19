@@ -62,7 +62,11 @@ function authenticateUser(_username, _pw) {
         saveSessionToken(responseObject);
         if (xhr.status == 200) {
             //startWebsocket();
-            window.location.href = "http://localhost:4000/public/shizzle/index.html";
+            //window.location.href = "http://localhost:4000/public/shizzle/index.html";
+
+
+            //stop
+            //window.location.assign("http://localhost:4000/public/shizzle/index.html");
         }
 
         console.log('auth server response');
@@ -101,15 +105,17 @@ function saveSessionToken(responseObject) {
     localStorage.setItem('userSessionToken', responseObject.token);
     localStorage.setItem('userSessionToken_TimeStamp', responseObject.createdDate);
 
-    document.cookie = "userSessionToken;" + responseObject.token + ";";
-    document.cookie = "userSessionToken_TimeStamp;" + responseObject.createdDate + ";";
+    //document.cookie = "userSessionToken;" + responseObject.token + ";";
+    //document.cookie = "userSessionToken_TimeStamp;" + responseObject.createdDate + ";";
+    document.cookie = "userSessionToken=" + responseObject.token + ";  path=/";
+    document.cookie = "userSessionToken_TimeStamp=" + responseObject.createdDate + ";  path=/";
+    document.cookie = "Authorization=Bearer " + responseObject.token + ";  path=/";
 }
 
 function getSessionToken() {
     
 }
-
-
+//document.cookie = 'X-Authorization=testCookie; path=/';
 //-----------------------------------------------------------------------------------------------
 function startWebsocket() {
     var content = document.getElementById("content");
