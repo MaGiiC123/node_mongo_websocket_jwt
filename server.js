@@ -19,6 +19,7 @@ app.use('/users', require('./users/users.controller'));
 app.use(express.static('/public'));
 app.use('/public', express.static(__dirname + '/public'));
 
+
 /*app.use("/", function(req, res) {
     res.sendFile(process.cwd() + '/public/index.html');
 });

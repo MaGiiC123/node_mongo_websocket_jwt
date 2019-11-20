@@ -5,18 +5,19 @@ const userService = require('../users/user.service');
 module.exports = jwt;
 
 function jwt() {
-    const secret = config.secret;
-    return expressJwt({ 
-        secret,
-        isRevoked,
+    return expressJwt({
+        secret: config.secret,
+        isRevoked: isRevoked_callback,
+        credentialsRequired: false,
         getToken: function fromHeaderOrQuerystring (req) {
-            console.log(req.headers);
+            console.log("req.headers cookie:");
+            console.log(String(req.headers.cookie).split(';')[0].split('=')[1]);
+
             if (String(req.headers.cookie).split(';')[0].split('=')[1]) {
                 return String(req.headers.cookie).split(';')[0].split('=')[1];
             }
             return null;
-        }, 
-        credentialsRequired: false
+        },
     }).unless({ path: [
             // public routes that don't require authentication
             '/users/authenticate',
@@ -30,7 +31,9 @@ function jwt() {
     });
 }
 
-async function isRevoked(req, payload, done) {
+async function isRevoked_callback(req, payload, done) {
+    console.log("payload:");
+    console.log(payload);
     const user = await userService.getById(payload.sub);
 
     // revoke token if user no longer exists
@@ -39,4 +42,4 @@ async function isRevoked(req, payload, done) {
     }
 
     done();
-};
+}; //does not even check the token
