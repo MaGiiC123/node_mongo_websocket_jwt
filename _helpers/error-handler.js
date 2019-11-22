@@ -1,8 +1,8 @@
 module.exports = errorHandler;
 
 function errorHandler(err, req, res, next) {
-    console.log("req:");
-    console.log(req);
+    //console.log("req:");
+    //console.log(req);
 
 
     if (typeof (err) === 'string') {

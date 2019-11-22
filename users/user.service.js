@@ -14,7 +14,9 @@ module.exports = {
 };
 
 async function authenticate({ username, password }) {
+    console.log("trying to find: ");
     console.log(username);
+    
     const user = await User.findOne({ username });
     if (user && bcrypt.compareSync(password, user.hash)) {
         const { hash, ...userWithoutHash } = user.toObject();

@@ -8,15 +8,19 @@ function jwt() {
     return expressJwt({
         secret: config.secret,
         isRevoked: isRevoked_callback,
-        credentialsRequired: false,
+        /*credentialsRequired: false,*/
         getToken: function fromHeaderOrQuerystring (req) {
-            console.log("req.headers cookie:");
-            console.log(String(req.headers.cookie).split(';')[0].split('=')[1]);
-
+            console.log("checking req.headers cookie:");
+            
             if (String(req.headers.cookie).split(';')[0].split('=')[1]) {
+                console.log("found a token:");
+                console.log(String(req.headers.cookie).split(';')[0].split('=')[1]);
                 return String(req.headers.cookie).split(';')[0].split('=')[1];
             }
-            return null;
+            else {
+                console.log("could not find a token:");
+                return null;
+            }
         },
     }).unless({ path: [
             // public routes that don't require authentication
@@ -42,4 +46,4 @@ async function isRevoked_callback(req, payload, done) {
     }
 
     done();
-}; //does not even check the token
+};
