@@ -19,10 +19,11 @@ app.use(jwt()
             console.log("token has been verified!");
             console.log("req.user:");
             console.log(req.user);
-        }
-        //res.sendStatus(200);
 
-        next();
+            res.sendStatus(200);
+            next();
+        }
+        res.sendStatus(400);
     }
 );
 
