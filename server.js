@@ -15,10 +15,12 @@ app.use(jwt()
     , function(req, res, next) {
         console.log("req.user:");
         console.log(req.user);
-        /*if (!req.user.admin) {
-            return res.sendStatus(401);
+        if (req.user != undefined) {
+            console.log("token has been verified!");
+            console.log("req.user:");
+            console.log(req.user);
         }
-        res.sendStatus(200);*/
+        //res.sendStatus(200);
 
         next();
     }
