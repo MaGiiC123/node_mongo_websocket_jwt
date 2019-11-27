@@ -11,7 +11,10 @@ function jwt() {
         /*credentialsRequired: false,*/
         getToken: function fromHeaderOrQuerystring (req) {
             console.log("checking req.headers cookie:");
-            
+            console.log(req.url);
+            console.log("cookies:");
+            console.log(req.header.cookie);
+
             if (String(req.headers.cookie).split(';')[0].split('=')[1]) {
                 console.log("found a token:");
                 console.log(String(req.headers.cookie).split(';')[0].split('=')[1]);

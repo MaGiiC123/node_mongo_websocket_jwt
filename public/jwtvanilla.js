@@ -53,6 +53,10 @@ function authenticateUser(_username, _pw) {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+
+    //xhr.setRequestHeader({ Authorization: "Bearer " + localStorage.getItem("userSessionToken") });
+    xhr.setRequestHeader("Authorization", localStorage.getItem("userSessionToken"));
+
     xhr.addEventListener('load', function() {
         console.log('auth server response' + "| status:" + this.response.status);
 
@@ -144,8 +148,8 @@ function startWebsocket() {
 
     connection.onopen = function () {
         // first we want users to enter their names
-        input.removeAttr('disabled');
-        status.text('Choose name:');
+        input.removeAttribute('disabled');
+        status.textContent = 'Choose name:';
     };
 
     connection.onerror = function (error) {
@@ -171,7 +175,7 @@ function startWebsocket() {
         if (json.type === 'color') { // first response from the server with user's color
             myColor = json.data;
             status.text(myName + ': ').css('color', myColor);
-            input.removeAttr('disabled').focus();
+            input.removeAttribute('disabled').focus();
             // from now user can start sending messages
         } else if (json.type === 'history') { // entire message history
             // insert every single message to the chat window
@@ -179,7 +183,7 @@ function startWebsocket() {
                 addMessage(json.data[i].author, json.data[i].text, json.data[i].color, new Date(json.data[i].time));
             }
         } else if (json.type === 'message') { // it's a single message
-            input.removeAttr('disabled'); // let the user write another message
+            input.removeAttribute('disabled'); // let the user write another message
             addMessage(json.data.author, json.data.text, json.data.color, new Date(json.data.time));
         } else {
             console.log('Hmm..., I\'ve never seen JSON like this: ', json);
@@ -189,7 +193,8 @@ function startWebsocket() {
     /**
      * Send mesage when user presses Enter key
      */
-    input.keydown(function(e) {
+    //input.keydown(function(e) {
+    input.addEventListener('keydown', function(e) {
         if (e.keyCode === 13) {
             //var msg = $(this).val();
             var msg = input.value;
@@ -202,7 +207,7 @@ function startWebsocket() {
             input.value = '';
             // disable the input field to make the user wait until server
             // sends back response
-            input.attr('disabled', 'disabled');
+            input.setAttribute('disabled', 'disabled');
 
             // we know that the first message sent from a user their name
             if (myName === false) {
@@ -219,7 +224,7 @@ function startWebsocket() {
     setInterval(function() {
         if (connection.readyState !== 1) {
             status.text('Error');
-            input.attr('disabled', 'disabled').val('Unable to comminucate with the WebSocket server.');
+            input.setAttribute('disabled', 'disabled').val('Unable to comminucate with the WebSocket server.');
         }
     }, 3000);
 

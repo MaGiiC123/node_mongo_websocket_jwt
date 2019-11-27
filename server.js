@@ -15,6 +15,19 @@ app.use(jwt()
     , function(req, res, next) {
         console.log("req.user:");
         console.log(req.user);
+        console.log("req.url:");
+        console.log(req.url);
+        if (req.url.includes("public") || req.url.includes("authenticate") ) {
+            if (req.user != undefined) {
+                console.log("unauth route but authenticated");
+                next();
+                return; 
+            }
+            console.log("unauth route but not logged in");
+            next();
+            return;
+        }
+
         if (req.user != undefined) {
             console.log("token has been verified!");
             console.log("req.user:");
@@ -23,7 +36,8 @@ app.use(jwt()
             res.sendStatus(200);
             next();
         }
-        res.sendStatus(400);
+        res.status(400).json({ message: 'missing authentication' });
+        //res.sendStatus(400);
     }
 );
 
