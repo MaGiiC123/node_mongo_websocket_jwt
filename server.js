@@ -4,6 +4,7 @@ const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const jwt = require('_helpers/jwt');
+const betterjwt = require('_betterJWT/betterjwt');
 const errorHandler = require('_helpers/error-handler');
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -33,13 +34,14 @@ app.use(jwt()
             console.log("req.user:");
             console.log(req.user);
 
-            res.sendStatus(200);
             next();
         }
         res.status(400).json({ message: 'missing authentication' });
         //res.sendStatus(400);
     }
 );
+
+app.use(require('_betterJWT/betterjwt'));
 
 // api routes
 app.use('/users', require('./users/users.controller'));

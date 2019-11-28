@@ -7,21 +7,21 @@ function getToken() {
     var tokenElement = document.getElementById('token');
     var user = userElement.value;
     var password = passwordElement.value;
-  
+
     xhr.open('POST', loginUrl, true);
     xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-    xhr.addEventListener('load', function() {
+    xhr.addEventListener('load', function () {
         var responseObject = JSON.parse(this.response);
         console.log(responseObject);
         if (responseObject.token) {
             tokenElement.innerHTML = responseObject.token;
         } else {
             tokenElement.innerHTML = "No token received";
-      }
+        }
     });
-  
-    var sendObject = JSON.stringify({name: user, password: password});  
-    console.log('going to send', sendObject);  
+
+    var sendObject = JSON.stringify({ name: user, password: password });
+    console.log('going to send', sendObject);
     xhr.send(sendObject);
 }
 
@@ -33,12 +33,12 @@ function getSecret() {
     var resultElement = document.getElementById('result');
     xhr.open('GET', url, true);
     xhr.setRequestHeader("Authorization", "JWT " + tokenElement.innerHTML);
-    xhr.addEventListener('load', function() {
+    xhr.addEventListener('load', function () {
         var responseObject = JSON.parse(this.response);
         console.log(responseObject);
         resultElement.innerHTML = this.responseText;
     });
-  
+
     xhr.send(null);
 }
 
@@ -57,7 +57,7 @@ function authenticateUser(_username, _pw) {
     //xhr.setRequestHeader({ Authorization: "Bearer " + localStorage.getItem("userSessionToken") });
     xhr.setRequestHeader("Authorization", localStorage.getItem("userSessionToken"));
 
-    xhr.addEventListener('load', function() {
+    xhr.addEventListener('load', function () {
         console.log('auth server response' + "| status:" + this.response.status);
 
         var responseObject = JSON.parse(this.response);
@@ -75,10 +75,42 @@ function authenticateUser(_username, _pw) {
 
         console.log('auth server response');
     });
-    
-    var sendObject = JSON.stringify({username: _username.value, password: _pw.value});
+
+    var sendObject = JSON.stringify({ username: _username.value, password: _pw.value });
     console.log(sendObject);
     xhr.send(sendObject);
+}
+
+function fetchapi_authenticateUser(_username, _pw) {
+    console.log('trying to authenticate!');
+
+    _username = document.getElementById('username');
+    _pw = document.getElementById('password');
+
+    try {
+        var fetch_call = await fetch("http://localhost:4000/users/authenticate", {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authorization': localStorage.getItem('userSessionToken'),
+                'Cookie': document.cookie
+            },
+            redirect: "follow",
+            referrer: 'no-referrer',
+            body: JSON.stringify({ username: _username.value, password: _pw.value })
+        });
+        if (!fetch_call.ok) {
+            throw new Error('Network respnse was not ok.')
+        }
+        console.log('auth server response' + "| status:" + this.fetch_call.status);
+        const fetch_data = await fetch_call.json();
+        console.log('Success:', JSON.stringify(fetch_data));
+    } catch (err) {
+        console.error('Error:', err);
+    }
 }
 
 function registerUser(_username, _pw) {
@@ -91,21 +123,21 @@ function registerUser(_username, _pw) {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-    xhr.addEventListener('load', function() {
+    xhr.addEventListener('load', function () {
         var responseObject = JSON.parse(this.response);
         console.log(responseObject);
     });
-    
+
     //var sendObject = JSON.stringify({username: _username.value, password: _pw.value});
     //var sendObject = JSON.stringify({firstName: "test", lastName: "test", username: "test", password: "test"});
-    var sendObject = JSON.stringify({firstName: _username.value, lastName: _username.value, username: _username.value, password: _pw.value});
+    var sendObject = JSON.stringify({ firstName: _username.value, lastName: _username.value, username: _username.value, password: _pw.value });
     console.log(_username);
     console.log(sendObject);
     xhr.send(sendObject);
 }
 
 function saveSessionToken(responseObject) {
-    console.log('saving token: "'+ responseObject.token +'"');
+    console.log('saving token: "' + responseObject.token + '"');
     localStorage.setItem('userSessionToken', responseObject.token);
     localStorage.setItem('userSessionToken_TimeStamp', responseObject.createdDate);
 
@@ -117,7 +149,7 @@ function saveSessionToken(responseObject) {
 }
 
 function getSessionToken() {
-    
+
 }
 //document.cookie = 'X-Authorization=testCookie; path=/';
 //-----------------------------------------------------------------------------------------------
@@ -179,7 +211,7 @@ function startWebsocket() {
             // from now user can start sending messages
         } else if (json.type === 'history') { // entire message history
             // insert every single message to the chat window
-            for (var i=0; i < json.data.length; i++) {
+            for (var i = 0; i < json.data.length; i++) {
                 addMessage(json.data[i].author, json.data[i].text, json.data[i].color, new Date(json.data[i].time));
             }
         } else if (json.type === 'message') { // it's a single message
@@ -194,7 +226,7 @@ function startWebsocket() {
      * Send mesage when user presses Enter key
      */
     //input.keydown(function(e) {
-    input.addEventListener('keydown', function(e) {
+    input.addEventListener('keydown', function (e) {
         if (e.keyCode === 13) {
             //var msg = $(this).val();
             var msg = input.value;
@@ -221,9 +253,9 @@ function startWebsocket() {
      * in 3 seconds then show some error message to notify the user that
      * something is wrong.
      */
-    setInterval(function() {
+    setInterval(function () {
         if (connection.readyState !== 1) {
-            status.text('Error');
+            status.textContent = 'Error';
             input.setAttribute('disabled', 'disabled').val('Unable to comminucate with the WebSocket server.');
         }
     }, 3000);
@@ -233,8 +265,8 @@ function startWebsocket() {
      */
     function addMessage(author, message, color, dt) {
         content.prepend('<p><span style="color:' + color + '">' + author + '</span> @ ' +
-                + (dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours()) + ':'
-                + (dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes())
-                + ': ' + message + '</p>');
+            + (dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours()) + ':'
+            + (dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes())
+            + ': ' + message + '</p>');
     }
 }

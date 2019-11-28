@@ -14,18 +14,25 @@ module.exports = {
 };
 
 async function authenticate({ username, password }) {
-    console.log("trying to find: ");
-    console.log(username);
-    
+    console.log("trying to find: " + username);
+    console.log("trying to find: ", username);
+
     const user = await User.findOne({ username });
     if (user && bcrypt.compareSync(password, user.hash)) {
         const { hash, ...userWithoutHash } = user.toObject();
         const token = jwt.sign({ sub: user.id }, config.secret);
-        return {
-            ...userWithoutHash,
-            token
-        };
+
+        console.log("found: ");
+        console.log(username);
+        console.log("send this token:");
+        console.log(token);
+
+        return { ...userWithoutHash, token };        
     }
+    else {
+        console.log("could not find: ");
+        console.log(username);
+    }    
 }
 
 async function getAll() {
