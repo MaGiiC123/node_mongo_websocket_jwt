@@ -112,8 +112,26 @@ function refresh(req, res) {
 
 function general(req, res, next) {
     console.log("general jwt auth start");
-    console.log("general jwt auth end");
+    
+    console.log("Authorization header: ", req.header("Authorization"));
+    console.log("Authorization cookie: ", String(req.headers.cookie).split(';')[0].split('=')[1]);
+    
+    const tokenToVerify = (req.header("Authorization") == undefined 
+                        || req.header("Authorization") == null)
+                        ? req.header("Authorization")
+                        : String(req.headers.cookie).split(';')[0].split('=')[1];
+    
+    if (tokenToVerify != null || tokenToVerify != undefined) {    
+        jwt.verify(tokenToVerify, config.secret, function(err, decodedToken) {
+            if (err) {
+                console.log("token verify error: ", err);
+            } else {
+                console.log("decodedToken: ", decodedToken);
+            }
+        });
+    }
 
+    console.log("general jwt auth end");
     next();
 }
 

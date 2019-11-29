@@ -81,7 +81,7 @@ function authenticateUser(_username, _pw) {
     xhr.send(sendObject);
 }
 
-function fetchapi_authenticateUser(_username, _pw) {
+async function fetchapi_authenticateUser(_username, _pw) {
     console.log('trying to authenticate!');
 
     _username = document.getElementById('username');
