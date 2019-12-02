@@ -111,21 +111,41 @@ function refresh(req, res) {
 }
 
 function general(req, res, next) {
+    console.log(req.url);
+    if (req.url.includes(config.unauthenticatedRoutes[0]) || req.url.includes("authenticate") ) {
+        /*if (req.user != undefined) {
+            console.log("unauth route but authenticated");
+            next();
+            return; 
+        }*/
+        console.log("unauth route but not logged in");
+        next();
+        return;
+    }
+
     console.log("general jwt auth start");
-    
+    var xxx = String(req.headers.cookie).split(';')[0].split('=')[1];
     console.log("Authorization header: ", req.header("Authorization"));
-    console.log("Authorization cookie: ", String(req.headers.cookie).split(';')[0].split('=')[1]);
-    
-    const tokenToVerify = (req.header("Authorization") == undefined 
+    console.log("Authorization cookie: ", xxx);
+
+    var tokenToVerify = (req.header("Authorization") == undefined 
                         || req.header("Authorization") == null)
                         ? req.header("Authorization")
-                        : String(req.headers.cookie).split(';')[0].split('=')[1];
+                        : xxx;
     
-    if (tokenToVerify != null || tokenToVerify != undefined) {    
+    if (req.header("Authorization") != undefined || req.header("Authorization") != null) {
+        tokenToVerify = req.header("Authorization");
+    } else {
+        tokenToVerify = xxx;
+    }
+    console.log("token found: ", tokenToVerify);
+    console.log(req.header);
+    if (tokenToVerify != null && tokenToVerify != undefined) {
         jwt.verify(tokenToVerify, config.secret, function(err, decodedToken) {
             if (err) {
                 console.log("token verify error: ", err);
-            } else {
+                return res.status(401).json({ message: 'Invalid Token' });
+            } else if (decodedToken) {
                 console.log("decodedToken: ", decodedToken);
             }
         });

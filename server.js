@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // use JWT auth to secure the api
-app.use(jwt()
+/*app.use(jwt()
     , function(req, res, next) {
         console.log("req.user:");
         console.log(req.user);
@@ -39,7 +39,7 @@ app.use(jwt()
         res.status(400).json({ message: 'missing authentication' });
         //res.sendStatus(400);
     }
-);
+);*/
 
 app.use(require('_betterJWT/betterjwt'));
 
