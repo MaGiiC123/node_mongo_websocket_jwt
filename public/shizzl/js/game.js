@@ -192,7 +192,9 @@ var Game = {
 
 		var avail = [];
 		for (var i=0;i<list.length;i++) {
-			if (Game.terrain.get(list[i][0], list[i][1]) == Game.Terrain.TYPE_LAND) { avail.push(list[i]); }
+			if (Game.terrain.get(list[i][0], list[i][1]) == Game.Terrain.TYPE_LAND) { 
+				avail.push(list[i]); 
+			}
 		}
 		return avail.random();
 	}

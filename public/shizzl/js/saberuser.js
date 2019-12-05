@@ -37,9 +37,11 @@ Game.SaberUser.prototype._lightsaber = function() {
 	this.adjustMana(-Game.Rules.SABER_PRICE);
 
 	Game.engine.lock();
-	new Game.Lightsaber(this, this._saberColor).go().then(function() {
-		Game.engine.unlock();
-	});
+	new Game.Lightsaber(this, this._saberColor)
+			.go()
+			.then(function() {
+				Game.engine.unlock();
+			});
 	return true; /* no more listening */
 }
 

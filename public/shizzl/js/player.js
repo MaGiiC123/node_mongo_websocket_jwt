@@ -22,37 +22,37 @@ Game.Player = function(type) {
 
 	/*H(72) J(74) K(75) L(76)*/
 	/*B(66) N(78) U(85) Y(89)*/
-	this._movementKeys[75]	= 0;
-	this._movementKeys[85]	= 1;
-	this._movementKeys[76]	= 2;
-	this._movementKeys[78]	= 3;
-	this._movementKeys[74]	= 4;
-	this._movementKeys[66]	= 5;
-	this._movementKeys[72]	= 6;
-	this._movementKeys[89]	= 7;
+	this._movementKeys[75]	= 0; //K
+	this._movementKeys[85]	= 1; //U
+	this._movementKeys[76]	= 2; //L
+	this._movementKeys[78]	= 3; //N
+	this._movementKeys[74]	= 4; //J
+	this._movementKeys[66]	= 5; //B
+	this._movementKeys[72]	= 6; //H
+	this._movementKeys[89]	= 7; //Y
 
-	this._movementKeys[104]	= 0;
-	this._movementKeys[105]	= 1;
-	this._movementKeys[102]	= 2;
-	this._movementKeys[99]	= 3;
-	this._movementKeys[98]	= 4;
-	this._movementKeys[97]	= 5;
-	this._movementKeys[100]	= 6;
-	this._movementKeys[103]	= 7;
+	this._movementKeys[104]	= 0; //numpad8
+	this._movementKeys[105]	= 1; //numpad9
+	this._movementKeys[102]	= 2; //numpad6
+	this._movementKeys[99]	= 3; //numpad3
+	this._movementKeys[98]	= 4; //numpad2
+	this._movementKeys[97]	= 5; //numpad1
+	this._movementKeys[100]	= 6; //numpad4
+	this._movementKeys[103]	= 7; //numpad7
 	
-	this._movementKeys[12]	= -1;
-	this._movementKeys[101]	= -1;
-	this._movementKeys[190]	= -1;
+	this._movementKeys[12]	= -1; //does not exist
+	this._movementKeys[101]	= -1; //numpad5
+	this._movementKeys[190]	= -1; //period
 	
 	/*NumPad Controls*/
-	this._movementKeys[38] = 0;
-	this._movementKeys[33] = 1;
-	this._movementKeys[39] = 2;
-	this._movementKeys[34] = 3;
-	this._movementKeys[40] = 4;
-	this._movementKeys[35] = 5;
-	this._movementKeys[37] = 6;
-	this._movementKeys[36] = 7;
+	this._movementKeys[38] = 0; //arrowup
+	this._movementKeys[33] = 1; //numpad9
+	this._movementKeys[39] = 2; //arrowright
+	this._movementKeys[34] = 3; //numpad3
+	this._movementKeys[40] = 4; //arrowdown
+	this._movementKeys[35] = 5; //numpad1
+	this._movementKeys[37] = 6; //arrowleft
+	this._movementKeys[36] = 7; //numpad7
 }
 Game.Player.extend(Game.SaberUser);
 

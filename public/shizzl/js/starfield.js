@@ -9,7 +9,7 @@ Game.Starfield = {
 
 		var colors = ["#ddd", "#aaa", "#777"];
 
-		for (var i=0;i<100;i++) {
+		for (var i=0; i<100; i++) {
 			var x = ~~(size * ROT.RNG.getUniform());
 			var y = ~~(size * ROT.RNG.getUniform());
 
